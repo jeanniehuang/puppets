@@ -1,0 +1,621 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01B53AF4F9A49F6260A4D882 /* PuppetApplyRaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AEBCF36909CCA720CE8BC8E5 /* PuppetApplyRaster.cpp */; };
+		05F53C642EB31E9F4CC69BA2 /* PuppetFunctionsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71BDA6DB2BC20A41712EB5D9 /* PuppetFunctionsTests.cpp */; };
+		100C15C2E8B6B433866BD2A9 /* PuppetVectorSkinner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3D542DA0E6EB7FDE237574D /* PuppetVectorSkinner.cpp */; };
+		3B9E65B361A40EDCDE91A669 /* PuppetEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A4EC154AD479459BC4B95F6 /* PuppetEditor.cpp */; };
+		505C8978732813DC7F58E509 /* PuppetTestHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A7F8F270BBCF1A44D512C8 /* PuppetTestHelpers.cpp */; };
+		52E7877DC1D3FE16DEA21A9D /* PuppetPrograms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EDD14F0C4CBA3B40A86F863F /* PuppetPrograms.cpp */; };
+		5A1DDB42F5EF2B449BED9C04 /* PuppetProgramsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99BE95C66F0CFCAF0A46AB07 /* PuppetProgramsTests.cpp */; };
+		5F1DDB9F2B81CCC4B61A6598 /* PuppetStrokerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2868B36A4F760CA0AD7965 /* PuppetStrokerTests.cpp */; };
+		5F6FA40A8314ABB59D13616D /* PuppetDynamicIterationStrategyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B84D687601F369082C4C44D8 /* PuppetDynamicIterationStrategyTests.cpp */; };
+		646347873DA6027DB109D4AF /* PuppetPSLGAutoZoneAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F41314EA66D42F0C36061B83 /* PuppetPSLGAutoZoneAdapter.cpp */; };
+		753D3F0C685448CBE8526CEE /* PuppetEffectVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E4D6AFD96894587B2387222 /* PuppetEffectVector.cpp */; };
+		7F0DB70C43E3D1E377626E89 /* PuppetDynamicIterationStrategy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 101926F68FF37E95342441F9 /* PuppetDynamicIterationStrategy.cpp */; };
+		82E8FE5A06DFFDAB7969E94D /* bezier_curve_fitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FC5F414A93697018E02F55D /* bezier_curve_fitter.cpp */; };
+		9A2233B497E561C93BE43F08 /* PuppetEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCB0EE59E070D4895CC3629D /* PuppetEffect.cpp */; };
+		A1C16F4E674A060D3BAC2D2B /* PuppetFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB061BB716241756E3F6607B /* PuppetFunctions.cpp */; };
+		CA425B4B0E9303EA7BDBC9F7 /* PuppetApplyVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D5BB300869C939D30456CEB /* PuppetApplyVector.cpp */; };
+		D039A5C3D4EE4525CCC430D2 /* PuppetImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A6B788992A8E0A5E5462AD8 /* PuppetImage.cpp */; };
+		D91B1CD43D4D62EA67530DAC /* PuppetEffectTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B114A759BFB36997C6D31781 /* PuppetEffectTests.cpp */; };
+		E7D36231EB61571EC46A8B1A /* PuppetViewOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCA6CF891853923FE0139F5A /* PuppetViewOverlay.cpp */; };
+		E9867C17BA66B63CB10B062F /* PuppetStroker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71DB17B2139B6479713C862E /* PuppetStroker.cpp */; };
+		F5773BEE4E819F91B60DA08B /* PuppetEffectRaster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05662382CFB4DB0E3E88E610 /* PuppetEffectRaster.cpp */; };
+		F65548E0AF9D3F6535DEC81D /* PuppetTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C95FAF196535CFC93AD6355 /* PuppetTypes.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0208699AC489598838674710 /* PuppetStroker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetStroker.h; sourceTree = "<group>"; };
+		04467E41D77CFEF538A149E7 /* puppet_from_bitmask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet_from_bitmask.h; sourceTree = "<group>"; };
+		05662382CFB4DB0E3E88E610 /* PuppetEffectRaster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetEffectRaster.cpp; sourceTree = "<group>"; };
+		074122FAC91CE07D039094C2 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		0BEDD22328B92C4E67B7E231 /* nearestNeighborSearch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nearestNeighborSearch.h; sourceTree = "<group>"; };
+		0DFCD65374F8A215D1A2FFC5 /* puppet_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet_base.h; sourceTree = "<group>"; };
+		0E32D4DBAAE18939C8BA40F2 /* PuppetTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetTypes.h; sourceTree = "<group>"; };
+		0F18E2E212D07A31B36F5025 /* puppet-ut.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "puppet-ut.xcconfig"; sourceTree = "<group>"; };
+		101926F68FF37E95342441F9 /* PuppetDynamicIterationStrategy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetDynamicIterationStrategy.cpp; sourceTree = "<group>"; };
+		179F4EA81F8541C9E835A5A6 /* all.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all.h; sourceTree = "<group>"; };
+		19D33029E96B335998B07F48 /* bezier_segment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bezier_segment.h; sourceTree = "<group>"; };
+		1FC5F414A93697018E02F55D /* bezier_curve_fitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bezier_curve_fitter.cpp; sourceTree = "<group>"; };
+		22EF4FE7E0A6CA7FCBC01052 /* puppet_figure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet_figure.h; sourceTree = "<group>"; };
+		25C0A40FE05180CFA28CACB2 /* PuppetVectorSkinner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetVectorSkinner.h; sourceTree = "<group>"; };
+		25DD6BC77B415F3D453DA305 /* project-release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "project-release.xcconfig"; sourceTree = "<group>"; };
+		2A4EC154AD479459BC4B95F6 /* PuppetEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetEditor.cpp; sourceTree = "<group>"; };
+		2CB397CFB22E472BF6D90497 /* PuppetEffect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetEffect.h; sourceTree = "<group>"; };
+		2E8A601EF7EC941A6890AD7C /* libpuppet-ut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libpuppet-ut.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		31A7F8F270BBCF1A44D512C8 /* PuppetTestHelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetTestHelpers.cpp; sourceTree = "<group>"; };
+		390C8F60F838970E30DC6CC1 /* puppet.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = puppet.xcconfig; sourceTree = "<group>"; };
+		3ABDBA83E4C759BACAD8DE2D /* PuppetPSLGAutoZoneAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetPSLGAutoZoneAdapter.h; sourceTree = "<group>"; };
+		3DC3627FF7FE1ED5798ACF3F /* common.gypi */ = {isa = PBXFileReference; explicitFileType = sourcecode; name = common.gypi; path = ../../../../sketchlib/shared/sharedconfig/common.gypi; sourceTree = "<group>"; };
+		3F98D1D792BE4B32604E1429 /* PuppetDynamicIterationStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetDynamicIterationStrategy.h; sourceTree = "<group>"; };
+		488851D525EB0BCC4B9F8E1A /* PuppetEffectVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetEffectVector.h; sourceTree = "<group>"; };
+		49249F2C3F5F533A91739C06 /* PuppetViewOverlay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetViewOverlay.h; sourceTree = "<group>"; };
+		4EE5769E3F65968D5B79D8D3 /* all.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all.h; sourceTree = "<group>"; };
+		52E0EDA76287E99C9FD750AB /* project-debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "project-debug.xcconfig"; sourceTree = "<group>"; };
+		537A14F2D20C5D7C489566BE /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		55F2A49055CCB17EC9320862 /* SculptingPuppet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SculptingPuppet.h; sourceTree = "<group>"; };
+		589CFDD4F9BC0FB8C1D2B8FF /* puppet_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet_utils.h; sourceTree = "<group>"; };
+		5A6B788992A8E0A5E5462AD8 /* PuppetImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetImage.cpp; sourceTree = "<group>"; };
+		5A7D71305289BC362EB0E348 /* nearestNeighborSearchFLANN.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nearestNeighborSearchFLANN.h; sourceTree = "<group>"; };
+		5EF940E571D1BBD9344EFA8B /* AbstractPuppet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AbstractPuppet.h; sourceTree = "<group>"; };
+		6C95FAF196535CFC93AD6355 /* PuppetTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetTypes.cpp; sourceTree = "<group>"; };
+		6F72D1F3595565BA8D46286F /* puppet.gyp */ = {isa = PBXFileReference; explicitFileType = sourcecode; path = puppet.gyp; sourceTree = "<group>"; };
+		71BDA6DB2BC20A41712EB5D9 /* PuppetFunctionsTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetFunctionsTests.cpp; sourceTree = "<group>"; };
+		71DB17B2139B6479713C862E /* PuppetStroker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetStroker.cpp; sourceTree = "<group>"; };
+		71FA067C0E9E0C0238C6205A /* PuppetApplyRaster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetApplyRaster.h; sourceTree = "<group>"; };
+		732DE685E86F4CFD9E1994A1 /* sources.gypi */ = {isa = PBXFileReference; explicitFileType = sourcecode; name = sources.gypi; path = ../sources.gypi; sourceTree = "<group>"; };
+		7462C7CCF21D74A18845DD43 /* puppet_mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet_mesh.h; sourceTree = "<group>"; };
+		7AC77ECE9E26069B8D347405 /* bezier_curve_fitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bezier_curve_fitter.h; sourceTree = "<group>"; };
+		802D88B12341018D47E92B60 /* puppet_handle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet_handle.h; sourceTree = "<group>"; };
+		8103486A7D00ABC0E1D12708 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		8731A9EBC69325FA90D12C35 /* PuppetStrokeSample.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetStrokeSample.h; sourceTree = "<group>"; };
+		8B332912CDC81D66780C3E67 /* puppet_accelerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet_accelerator.h; sourceTree = "<group>"; };
+		8BE7AEBADE5BCBA2013EB5EE /* PuppetApplyVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetApplyVector.h; sourceTree = "<group>"; };
+		8E4C89F71A320417F5AE8A40 /* PuppetTestHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetTestHelpers.h; sourceTree = "<group>"; };
+		9000D431A3CE9879E2C9CD83 /* PuppetImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetImage.h; sourceTree = "<group>"; };
+		99A160E125A0CBBE2D0C1E25 /* PuppetSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetSettings.h; sourceTree = "<group>"; };
+		99BE95C66F0CFCAF0A46AB07 /* PuppetProgramsTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetProgramsTests.cpp; sourceTree = "<group>"; };
+		9AD099B0A856139CA3F550E5 /* bezier_curve.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bezier_curve.h; sourceTree = "<group>"; };
+		9D5BB300869C939D30456CEB /* PuppetApplyVector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetApplyVector.cpp; sourceTree = "<group>"; };
+		9E4D6AFD96894587B2387222 /* PuppetEffectVector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetEffectVector.cpp; sourceTree = "<group>"; };
+		A4D4AD7B97B82BE68E0CB61C /* PuppetEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetEditor.h; sourceTree = "<group>"; };
+		AEBCF36909CCA720CE8BC8E5 /* PuppetApplyRaster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetApplyRaster.cpp; sourceTree = "<group>"; };
+		AF53655CF9AEF16BECDFE05C /* skinner_LSQ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = skinner_LSQ.h; sourceTree = "<group>"; };
+		B114A759BFB36997C6D31781 /* PuppetEffectTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetEffectTests.cpp; sourceTree = "<group>"; };
+		B3844A2B4304F9C41EAEDCCC /* an_warper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = an_warper.h; sourceTree = "<group>"; };
+		B46CF3837B35FD56B40169B2 /* PuppetPrograms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetPrograms.h; sourceTree = "<group>"; };
+		B52EA4677BA3FA2B5C698A1D /* PuppetFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetFunctions.h; sourceTree = "<group>"; };
+		B698B291BA463B704EC67B29 /* libpuppet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpuppet.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B84D687601F369082C4C44D8 /* PuppetDynamicIterationStrategyTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetDynamicIterationStrategyTests.cpp; sourceTree = "<group>"; };
+		B850975A6820C30FF9E6133F /* bezier_segment_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bezier_segment_base.h; sourceTree = "<group>"; };
+		B932C0A8108E3E0ABF54C043 /* an_puppet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = an_puppet.h; sourceTree = "<group>"; };
+		C0B75C03EF1E78DDB4B6033C /* bezier_curve_base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bezier_curve_base.h; sourceTree = "<group>"; };
+		C49EFAA7E02019B7CBC52D17 /* puppet.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = puppet.metal; sourceTree = "<group>"; };
+		C8D6E1042B6D0D1F29387986 /* arap_puppet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arap_puppet.h; sourceTree = "<group>"; };
+		CCA6CF891853923FE0139F5A /* PuppetViewOverlay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetViewOverlay.cpp; sourceTree = "<group>"; };
+		CD2868B36A4F760CA0AD7965 /* PuppetStrokerTests.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetStrokerTests.cpp; sourceTree = "<group>"; };
+		D814BB74343537E9B83F051E /* beaker_puppet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = beaker_puppet.h; sourceTree = "<group>"; };
+		D88CAB7B2B7A9023F1077B46 /* PuppetGeometryUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetGeometryUtilities.h; sourceTree = "<group>"; };
+		DCB0EE59E070D4895CC3629D /* PuppetEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetEffect.cpp; sourceTree = "<group>"; };
+		DCF553D3D0253CF355A67A17 /* ADMMBirdWarper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADMMBirdWarper.h; sourceTree = "<group>"; };
+		DEFB8FBAB7FBF69DBC82ADC1 /* puppet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = puppet.h; sourceTree = "<group>"; };
+		EB039C33C3DBF1240BE7FC06 /* beaker_warper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = beaker_warper.h; sourceTree = "<group>"; };
+		EBDB17D3DF1A093B795FFED2 /* PuppetEffectRaster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PuppetEffectRaster.h; sourceTree = "<group>"; };
+		EDD14F0C4CBA3B40A86F863F /* PuppetPrograms.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetPrograms.cpp; sourceTree = "<group>"; };
+		F3D542DA0E6EB7FDE237574D /* PuppetVectorSkinner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetVectorSkinner.cpp; sourceTree = "<group>"; };
+		F41314EA66D42F0C36061B83 /* PuppetPSLGAutoZoneAdapter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetPSLGAutoZoneAdapter.cpp; sourceTree = "<group>"; };
+		F802227AA401DE114D89560E /* dilate.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = dilate.metal; sourceTree = "<group>"; };
+		F975DB431825A5A37B496C46 /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		FB061BB716241756E3F6607B /* PuppetFunctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PuppetFunctions.cpp; sourceTree = "<group>"; };
+		FD3596F93B079F5A50390C49 /* lbs_arap_puppet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lbs_arap_puppet.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		27DF90509C457A15DE7C217A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AFA82C5F13960DF76E498D10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		027BCD2C15DFDF47CB6810A4 /* bezier_skinner */ = {
+			isa = PBXGroup;
+			children = (
+				9AD099B0A856139CA3F550E5 /* bezier_curve.h */,
+				C0B75C03EF1E78DDB4B6033C /* bezier_curve_base.h */,
+				1FC5F414A93697018E02F55D /* bezier_curve_fitter.cpp */,
+				7AC77ECE9E26069B8D347405 /* bezier_curve_fitter.h */,
+				19D33029E96B335998B07F48 /* bezier_segment.h */,
+				B850975A6820C30FF9E6133F /* bezier_segment_base.h */,
+				AF53655CF9AEF16BECDFE05C /* skinner_LSQ.h */,
+				537A14F2D20C5D7C489566BE /* util.h */,
+			);
+			path = bezier_skinner;
+			sourceTree = "<group>";
+		};
+		0727F67BFF9E8D0F1F2F3E71 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				99A160E125A0CBBE2D0C1E25 /* PuppetSettings.h */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		09B3F2DD76C722649979DF2B /* view */ = {
+			isa = PBXGroup;
+			children = (
+				CCA6CF891853923FE0139F5A /* PuppetViewOverlay.cpp */,
+				49249F2C3F5F533A91739C06 /* PuppetViewOverlay.h */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		205AE9E14A6E51068AF8B2B8 = {
+			isa = PBXGroup;
+			children = (
+				4E9EE051E4EFBCAEECCAC497 /* Source */,
+				86647030FEC186935217DD78 /* Products */,
+				D046DD1654425B58D186C920 /* Build */,
+			);
+			sourceTree = "<group>";
+		};
+		2D5C303840180AB40A5D38DB /* core-base */ = {
+			isa = PBXGroup;
+			children = (
+				8103486A7D00ABC0E1D12708 /* common.h */,
+			);
+			path = "core-base";
+			sourceTree = "<group>";
+		};
+		2F26E599C5FB9E75EEBBA0A0 /* ext-flann */ = {
+			isa = PBXGroup;
+			children = (
+				5A7D71305289BC362EB0E348 /* nearestNeighborSearchFLANN.h */,
+			);
+			path = "ext-flann";
+			sourceTree = "<group>";
+		};
+		416990AE515EA7005609C752 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D82E605638FB8F54040C054F /* stroker */,
+				B114A759BFB36997C6D31781 /* PuppetEffectTests.cpp */,
+				99BE95C66F0CFCAF0A46AB07 /* PuppetProgramsTests.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		4E9EE051E4EFBCAEECCAC497 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				FA72799E16157C7532350EE1 /* ../.. */,
+				5609FA41B9B3137BE061E76D /* config */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		5609FA41B9B3137BE061E76D /* config */ = {
+			isa = PBXGroup;
+			children = (
+				0F18E2E212D07A31B36F5025 /* puppet-ut.xcconfig */,
+				390C8F60F838970E30DC6CC1 /* puppet.xcconfig */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		60D7279797555A240576C0B1 /* puppet_warp */ = {
+			isa = PBXGroup;
+			children = (
+				C8D6E1042B6D0D1F29387986 /* arap_puppet.h */,
+				FD3596F93B079F5A50390C49 /* lbs_arap_puppet.h */,
+				DEFB8FBAB7FBF69DBC82ADC1 /* puppet.h */,
+				8B332912CDC81D66780C3E67 /* puppet_accelerator.h */,
+				0DFCD65374F8A215D1A2FFC5 /* puppet_base.h */,
+				22EF4FE7E0A6CA7FCBC01052 /* puppet_figure.h */,
+				04467E41D77CFEF538A149E7 /* puppet_from_bitmask.h */,
+				802D88B12341018D47E92B60 /* puppet_handle.h */,
+				7462C7CCF21D74A18845DD43 /* puppet_mesh.h */,
+				589CFDD4F9BC0FB8C1D2B8FF /* puppet_utils.h */,
+			);
+			path = puppet_warp;
+			sourceTree = "<group>";
+		};
+		75AE2A0F44E854B5D782D634 /* mLib/include */ = {
+			isa = PBXGroup;
+			children = (
+				2D5C303840180AB40A5D38DB /* core-base */,
+				8108FFC8126D80EF6202289F /* core-util */,
+				2F26E599C5FB9E75EEBBA0A0 /* ext-flann */,
+			);
+			path = mLib/include;
+			sourceTree = "<group>";
+		};
+		8108FFC8126D80EF6202289F /* core-util */ = {
+			isa = PBXGroup;
+			children = (
+				0BEDD22328B92C4E67B7E231 /* nearestNeighborSearch.h */,
+			);
+			path = "core-util";
+			sourceTree = "<group>";
+		};
+		82B34E9F17B58C8C211485DD /* api */ = {
+			isa = PBXGroup;
+			children = (
+				F414A1B0FB0EFA00CCB6AE61 /* control */,
+				0727F67BFF9E8D0F1F2F3E71 /* model */,
+				09B3F2DD76C722649979DF2B /* view */,
+			);
+			path = api;
+			sourceTree = "<group>";
+		};
+		86647030FEC186935217DD78 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B698B291BA463B704EC67B29 /* libpuppet.a */,
+				2E8A601EF7EC941A6890AD7C /* libpuppet-ut.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9599E1FE590C3C7E55A067B0 /* PuppetWarpV4/source */ = {
+			isa = PBXGroup;
+			children = (
+				75AE2A0F44E854B5D782D634 /* mLib/include */,
+				60D7279797555A240576C0B1 /* puppet_warp */,
+				C47315CE69EAE9BB434983FD /* puppet_warp_an */,
+				CC13D7A273671C67E87E8BBF /* puppet_warp_ch */,
+			);
+			path = PuppetWarpV4/source;
+			sourceTree = "<group>";
+		};
+		9B9A93986078C60104707455 /* api/control */ = {
+			isa = PBXGroup;
+			children = (
+				71BDA6DB2BC20A41712EB5D9 /* PuppetFunctionsTests.cpp */,
+			);
+			path = api/control;
+			sourceTree = "<group>";
+		};
+		AAD297928F4790F6BEE8293F /* stroker */ = {
+			isa = PBXGroup;
+			children = (
+				101926F68FF37E95342441F9 /* PuppetDynamicIterationStrategy.cpp */,
+				3F98D1D792BE4B32604E1429 /* PuppetDynamicIterationStrategy.h */,
+				8731A9EBC69325FA90D12C35 /* PuppetStrokeSample.h */,
+				71DB17B2139B6479713C862E /* PuppetStroker.cpp */,
+				0208699AC489598838674710 /* PuppetStroker.h */,
+			);
+			path = stroker;
+			sourceTree = "<group>";
+		};
+		B8D55AC1CDA90A492900BEC5 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				9B9A93986078C60104707455 /* api/control */,
+				416990AE515EA7005609C752 /* src */,
+				31A7F8F270BBCF1A44D512C8 /* PuppetTestHelpers.cpp */,
+				8E4C89F71A320417F5AE8A40 /* PuppetTestHelpers.h */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+		BEB88DFCD84F33595948C87D /* shaders/metal */ = {
+			isa = PBXGroup;
+			children = (
+				F802227AA401DE114D89560E /* dilate.metal */,
+				C49EFAA7E02019B7CBC52D17 /* puppet.metal */,
+			);
+			path = shaders/metal;
+			sourceTree = "<group>";
+		};
+		C47315CE69EAE9BB434983FD /* puppet_warp_an */ = {
+			isa = PBXGroup;
+			children = (
+				179F4EA81F8541C9E835A5A6 /* all.h */,
+				B932C0A8108E3E0ABF54C043 /* an_puppet.h */,
+				B3844A2B4304F9C41EAEDCCC /* an_warper.h */,
+				074122FAC91CE07D039094C2 /* common.h */,
+			);
+			path = puppet_warp_an;
+			sourceTree = "<group>";
+		};
+		CC13D7A273671C67E87E8BBF /* puppet_warp_ch */ = {
+			isa = PBXGroup;
+			children = (
+				4EE5769E3F65968D5B79D8D3 /* all.h */,
+				D814BB74343537E9B83F051E /* beaker_puppet.h */,
+				EB039C33C3DBF1240BE7FC06 /* beaker_warper.h */,
+				F975DB431825A5A37B496C46 /* common.h */,
+			);
+			path = puppet_warp_ch;
+			sourceTree = "<group>";
+		};
+		D046DD1654425B58D186C920 /* Build */ = {
+			isa = PBXGroup;
+			children = (
+				3DC3627FF7FE1ED5798ACF3F /* common.gypi */,
+				6F72D1F3595565BA8D46286F /* puppet.gyp */,
+				732DE685E86F4CFD9E1994A1 /* sources.gypi */,
+			);
+			name = Build;
+			sourceTree = "<group>";
+		};
+		D82E605638FB8F54040C054F /* stroker */ = {
+			isa = PBXGroup;
+			children = (
+				B84D687601F369082C4C44D8 /* PuppetDynamicIterationStrategyTests.cpp */,
+				CD2868B36A4F760CA0AD7965 /* PuppetStrokerTests.cpp */,
+			);
+			path = stroker;
+			sourceTree = "<group>";
+		};
+		F414A1B0FB0EFA00CCB6AE61 /* control */ = {
+			isa = PBXGroup;
+			children = (
+				FB061BB716241756E3F6607B /* PuppetFunctions.cpp */,
+				B52EA4677BA3FA2B5C698A1D /* PuppetFunctions.h */,
+			);
+			path = control;
+			sourceTree = "<group>";
+		};
+		FA6B5F5CF64BE5AB45560161 /* ../../sketchlib/shared/sharedconfig */ = {
+			isa = PBXGroup;
+			children = (
+				52E0EDA76287E99C9FD750AB /* project-debug.xcconfig */,
+				25DD6BC77B415F3D453DA305 /* project-release.xcconfig */,
+			);
+			path = ../../sketchlib/shared/sharedconfig;
+			sourceTree = "<group>";
+		};
+		FA72799E16157C7532350EE1 /* ../.. */ = {
+			isa = PBXGroup;
+			children = (
+				FA6B5F5CF64BE5AB45560161 /* ../../sketchlib/shared/sharedconfig */,
+				9599E1FE590C3C7E55A067B0 /* PuppetWarpV4/source */,
+				82B34E9F17B58C8C211485DD /* api */,
+				BEB88DFCD84F33595948C87D /* shaders/metal */,
+				FDE14FA55B0018311839EDB1 /* src */,
+				B8D55AC1CDA90A492900BEC5 /* tests */,
+			);
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		FDE14FA55B0018311839EDB1 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				027BCD2C15DFDF47CB6810A4 /* bezier_skinner */,
+				AAD297928F4790F6BEE8293F /* stroker */,
+				DCF553D3D0253CF355A67A17 /* ADMMBirdWarper.h */,
+				5EF940E571D1BBD9344EFA8B /* AbstractPuppet.h */,
+				AEBCF36909CCA720CE8BC8E5 /* PuppetApplyRaster.cpp */,
+				71FA067C0E9E0C0238C6205A /* PuppetApplyRaster.h */,
+				9D5BB300869C939D30456CEB /* PuppetApplyVector.cpp */,
+				8BE7AEBADE5BCBA2013EB5EE /* PuppetApplyVector.h */,
+				2A4EC154AD479459BC4B95F6 /* PuppetEditor.cpp */,
+				A4D4AD7B97B82BE68E0CB61C /* PuppetEditor.h */,
+				DCB0EE59E070D4895CC3629D /* PuppetEffect.cpp */,
+				2CB397CFB22E472BF6D90497 /* PuppetEffect.h */,
+				05662382CFB4DB0E3E88E610 /* PuppetEffectRaster.cpp */,
+				EBDB17D3DF1A093B795FFED2 /* PuppetEffectRaster.h */,
+				9E4D6AFD96894587B2387222 /* PuppetEffectVector.cpp */,
+				488851D525EB0BCC4B9F8E1A /* PuppetEffectVector.h */,
+				D88CAB7B2B7A9023F1077B46 /* PuppetGeometryUtilities.h */,
+				5A6B788992A8E0A5E5462AD8 /* PuppetImage.cpp */,
+				9000D431A3CE9879E2C9CD83 /* PuppetImage.h */,
+				F41314EA66D42F0C36061B83 /* PuppetPSLGAutoZoneAdapter.cpp */,
+				3ABDBA83E4C759BACAD8DE2D /* PuppetPSLGAutoZoneAdapter.h */,
+				EDD14F0C4CBA3B40A86F863F /* PuppetPrograms.cpp */,
+				B46CF3837B35FD56B40169B2 /* PuppetPrograms.h */,
+				6C95FAF196535CFC93AD6355 /* PuppetTypes.cpp */,
+				0E32D4DBAAE18939C8BA40F2 /* PuppetTypes.h */,
+				F3D542DA0E6EB7FDE237574D /* PuppetVectorSkinner.cpp */,
+				25C0A40FE05180CFA28CACB2 /* PuppetVectorSkinner.h */,
+				55F2A49055CCB17EC9320862 /* SculptingPuppet.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3598F3FE6CDD5F99AC49F00A /* puppet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A503130EFF75CB74090ED78 /* Build configuration list for PBXNativeTarget "puppet" */;
+			buildPhases = (
+				8EF3B6F6AEF6FA6940C94A8F /* Sources */,
+				27DF90509C457A15DE7C217A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = puppet;
+			productName = puppet;
+			productReference = B698B291BA463B704EC67B29 /* libpuppet.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		5BE73F986C52C8A1F8879338 /* puppet-ut */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5D1D3CE7C4B961E86D1E8FA /* Build configuration list for PBXNativeTarget "puppet-ut" */;
+			buildPhases = (
+				4CC34014066DCEBA5E38FC69 /* Sources */,
+				AFA82C5F13960DF76E498D10 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "puppet-ut";
+			productName = "puppet-ut";
+			productReference = 2E8A601EF7EC941A6890AD7C /* libpuppet-ut.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		07ED72C5C84E7DDB67AE9AFD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1500;
+				LastTestingUpgradeCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = D4A01B4BB80EC138F4DF1128 /* Build configuration list for PBXProject "puppet" */;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 1;
+			mainGroup = 205AE9E14A6E51068AF8B2B8;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3598F3FE6CDD5F99AC49F00A /* puppet */,
+				5BE73F986C52C8A1F8879338 /* puppet-ut */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4CC34014066DCEBA5E38FC69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				505C8978732813DC7F58E509 /* PuppetTestHelpers.cpp in Sources */,
+				05F53C642EB31E9F4CC69BA2 /* PuppetFunctionsTests.cpp in Sources */,
+				5A1DDB42F5EF2B449BED9C04 /* PuppetProgramsTests.cpp in Sources */,
+				D91B1CD43D4D62EA67530DAC /* PuppetEffectTests.cpp in Sources */,
+				5F6FA40A8314ABB59D13616D /* PuppetDynamicIterationStrategyTests.cpp in Sources */,
+				5F1DDB9F2B81CCC4B61A6598 /* PuppetStrokerTests.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8EF3B6F6AEF6FA6940C94A8F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7D36231EB61571EC46A8B1A /* PuppetViewOverlay.cpp in Sources */,
+				A1C16F4E674A060D3BAC2D2B /* PuppetFunctions.cpp in Sources */,
+				F5773BEE4E819F91B60DA08B /* PuppetEffectRaster.cpp in Sources */,
+				9A2233B497E561C93BE43F08 /* PuppetEffect.cpp in Sources */,
+				753D3F0C685448CBE8526CEE /* PuppetEffectVector.cpp in Sources */,
+				3B9E65B361A40EDCDE91A669 /* PuppetEditor.cpp in Sources */,
+				D039A5C3D4EE4525CCC430D2 /* PuppetImage.cpp in Sources */,
+				646347873DA6027DB109D4AF /* PuppetPSLGAutoZoneAdapter.cpp in Sources */,
+				01B53AF4F9A49F6260A4D882 /* PuppetApplyRaster.cpp in Sources */,
+				52E7877DC1D3FE16DEA21A9D /* PuppetPrograms.cpp in Sources */,
+				CA425B4B0E9303EA7BDBC9F7 /* PuppetApplyVector.cpp in Sources */,
+				F65548E0AF9D3F6535DEC81D /* PuppetTypes.cpp in Sources */,
+				100C15C2E8B6B433866BD2A9 /* PuppetVectorSkinner.cpp in Sources */,
+				7F0DB70C43E3D1E377626E89 /* PuppetDynamicIterationStrategy.cpp in Sources */,
+				E9867C17BA66B63CB10B062F /* PuppetStroker.cpp in Sources */,
+				82E8FE5A06DFFDAB7969E94D /* bezier_curve_fitter.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		03A0F5A50005EE007A0F7452 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 390C8F60F838970E30DC6CC1 /* puppet.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = puppet;
+			};
+			name = Release;
+		};
+		14A05E4BE321933EEDFAB767 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52E0EDA76287E99C9FD750AB /* project-debug.xcconfig */;
+			buildSettings = {
+				INTERMEDIATE_DIR = "$(PROJECT_DERIVED_FILE_DIR)/$(CONFIGURATION)";
+				SHARED_INTERMEDIATE_DIR = "$(SYMROOT)/DerivedSources/$(CONFIGURATION)";
+			};
+			name = Debug;
+		};
+		3BFF8B3D2CDC60786D5C2C84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 390C8F60F838970E30DC6CC1 /* puppet.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = puppet;
+			};
+			name = Debug;
+		};
+		9F5B58CCCFD2DF4D447F3797 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 25DD6BC77B415F3D453DA305 /* project-release.xcconfig */;
+			buildSettings = {
+				INTERMEDIATE_DIR = "$(PROJECT_DERIVED_FILE_DIR)/$(CONFIGURATION)";
+				SHARED_INTERMEDIATE_DIR = "$(SYMROOT)/DerivedSources/$(CONFIGURATION)";
+			};
+			name = Release;
+		};
+		C5D7954CA2C38F4506FB970A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F18E2E212D07A31B36F5025 /* puppet-ut.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "puppet-ut";
+			};
+			name = Debug;
+		};
+		E003FCAECEAB3406918F25C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F18E2E212D07A31B36F5025 /* puppet-ut.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = "puppet-ut";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A503130EFF75CB74090ED78 /* Build configuration list for PBXNativeTarget "puppet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				03A0F5A50005EE007A0F7452 /* Release */,
+				3BFF8B3D2CDC60786D5C2C84 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 1;
+			defaultConfigurationName = Release;
+		};
+		D4A01B4BB80EC138F4DF1128 /* Build configuration list for PBXProject "puppet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F5B58CCCFD2DF4D447F3797 /* Release */,
+				14A05E4BE321933EEDFAB767 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 1;
+			defaultConfigurationName = Release;
+		};
+		D5D1D3CE7C4B961E86D1E8FA /* Build configuration list for PBXNativeTarget "puppet-ut" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E003FCAECEAB3406918F25C0 /* Release */,
+				C5D7954CA2C38F4506FB970A /* Debug */,
+			);
+			defaultConfigurationIsVisible = 1;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 07ED72C5C84E7DDB67AE9AFD /* Project object */;
+}

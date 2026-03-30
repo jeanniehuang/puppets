@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove(Versions.props))"/>
+    <Import Project="puppet.props"/>
+  </ImportGroup>
+  <Import  Project="$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.props" Condition="Exists('$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.props')"/>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9481FE9C-5541-4ED2-8A4E-BC55B5000FDD}</ProjectGuid>
+    <Keyword>StaticLibrary</Keyword>
+    <RootNamespace>puppetwinrt</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <AppContainerApplication>true</AppContainerApplication>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+    <ApplicationType>Windows Store</ApplicationType>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+    <Import Project="..\..\..\..\sketchlib\shared\sharedconfig\Project.props"/>
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+    <Import Project="..\..\..\..\sketchlib\shared\sharedconfig\Project.props"/>
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+    <Import Project="..\..\..\..\sketchlib\shared\sharedconfig\Project.props"/>
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+    <Import Project="..\..\..\..\sketchlib\shared\sharedconfig\Project.props"/>
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+    <Import Project="..\..\..\..\sketchlib\shared\sharedconfig\Project.props"/>
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+    <Import Project="..\..\..\..\sketchlib\shared\sharedconfig\Project.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\.\bin\;$(MSBuildProjectDirectory)\.\bin\</ExecutablePath>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\Intermediate\$(MSBuildProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <TargetName>puppet</TargetName>
+    <TargetPath>$(OutDir)\puppet$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)puppet$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies></AdditionalDependencies>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)puppet$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies></AdditionalDependencies>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <TargetMachine>MachineARM</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)puppet$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies></AdditionalDependencies>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)puppet$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies></AdditionalDependencies>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)puppet$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies></AdditionalDependencies>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <TargetMachine>MachineARM</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)puppet$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies></AdditionalDependencies>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\shaders\metal\dilate.metal"/>
+    <None Include="..\..\shaders\metal\puppet.metal"/>
+    <None Include="puppet.gyp"/>
+    <None Include="packages.config"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\api\control\PuppetFunctions.h"/>
+    <ClInclude Include="..\..\api\model\PuppetSettings.h"/>
+    <ClInclude Include="..\..\api\view\PuppetViewOverlay.h"/>
+    <ClInclude Include="..\..\src\AbstractPuppet.h"/>
+    <ClInclude Include="..\..\src\ADMMBirdWarper.h"/>
+    <ClInclude Include="..\..\src\PuppetApplyRaster.h"/>
+    <ClInclude Include="..\..\src\PuppetApplyVector.h"/>
+    <ClInclude Include="..\..\src\PuppetEditor.h"/>
+    <ClInclude Include="..\..\src\PuppetEffect.h"/>
+    <ClInclude Include="..\..\src\PuppetEffectRaster.h"/>
+    <ClInclude Include="..\..\src\PuppetEffectVector.h"/>
+    <ClInclude Include="..\..\src\PuppetGeometryUtilities.h"/>
+    <ClInclude Include="..\..\src\PuppetImage.h"/>
+    <ClInclude Include="..\..\src\PuppetPrograms.h"/>
+    <ClInclude Include="..\..\src\PuppetPSLGAutoZoneAdapter.h"/>
+    <ClInclude Include="..\..\src\PuppetTypes.h"/>
+    <ClInclude Include="..\..\src\PuppetVectorSkinner.h"/>
+    <ClInclude Include="..\..\src\SculptingPuppet.h"/>
+    <ClInclude Include="..\..\src\bezier_skinner\bezier_curve.h"/>
+    <ClInclude Include="..\..\src\bezier_skinner\bezier_curve_base.h"/>
+    <ClInclude Include="..\..\src\bezier_skinner\bezier_curve_fitter.h"/>
+    <ClInclude Include="..\..\src\bezier_skinner\bezier_segment.h"/>
+    <ClInclude Include="..\..\src\bezier_skinner\bezier_segment_base.h"/>
+    <ClInclude Include="..\..\src\bezier_skinner\skinner_LSQ.h"/>
+    <ClInclude Include="..\..\src\bezier_skinner\util.h"/>
+    <ClInclude Include="..\..\src\stroker\PuppetDynamicIterationStrategy.h"/>
+    <ClInclude Include="..\..\src\stroker\PuppetStroker.h"/>
+    <ClInclude Include="..\..\src\stroker\PuppetStrokeSample.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\mLib\include\core-base\common.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\mLib\include\core-util\nearestNeighborSearch.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\mLib\include\ext-flann\nearestNeighborSearchFLANN.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\arap_puppet.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\lbs_arap_puppet.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet_accelerator.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet_base.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet_figure.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet_from_bitmask.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet_handle.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet_mesh.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp\puppet_utils.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_an\all.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_an\an_puppet.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_an\an_warper.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_an\common.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_ch\all.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_ch\beaker_puppet.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_ch\beaker_warper.h"/>
+    <ClInclude Include="..\..\PuppetWarpV4\source\puppet_warp_ch\common.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\api\control\PuppetFunctions.cpp"/>
+    <ClCompile Include="..\..\api\view\PuppetViewOverlay.cpp"/>
+    <ClCompile Include="..\..\src\PuppetApplyRaster.cpp"/>
+    <ClCompile Include="..\..\src\PuppetApplyVector.cpp"/>
+    <ClCompile Include="..\..\src\PuppetEditor.cpp"/>
+    <ClCompile Include="..\..\src\PuppetEffect.cpp"/>
+    <ClCompile Include="..\..\src\PuppetEffectRaster.cpp"/>
+    <ClCompile Include="..\..\src\PuppetEffectVector.cpp"/>
+    <ClCompile Include="..\..\src\PuppetImage.cpp"/>
+    <ClCompile Include="..\..\src\PuppetPrograms.cpp"/>
+    <ClCompile Include="..\..\src\PuppetPSLGAutoZoneAdapter.cpp"/>
+    <ClCompile Include="..\..\src\PuppetTypes.cpp"/>
+    <ClCompile Include="..\..\src\PuppetVectorSkinner.cpp"/>
+    <ClCompile Include="..\..\src\bezier_skinner\bezier_curve_fitter.cpp"/>
+    <ClCompile Include="..\..\src\stroker\PuppetDynamicIterationStrategy.cpp"/>
+    <ClCompile Include="..\..\src\stroker\PuppetStroker.cpp"/>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets"/>
+  <ImportGroup Label="ExtensionTargets">
+    <Import  Project="$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.targets" Condition="Exists('$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.targets')"/>
+  </ImportGroup>
+  <Target  Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.props')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.props'))"/>
+    <Error Condition="!Exists('$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)packages\Microsoft.WindowsAppSDK.$(__WindowsAppSDKVersion)\build\native\Microsoft.WindowsAppSDK.targets'))"/>
+  </Target>
+</Project>

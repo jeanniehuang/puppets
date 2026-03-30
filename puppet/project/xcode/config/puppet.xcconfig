@@ -1,0 +1,43 @@
+// ADOBE CONFIDENTIAL
+// ___________________
+//
+//  Copyright 2019 Adobe Systems Incorporated
+//  All Rights Reserved.
+//
+// NOTICE:  All information contained herein is, and remains
+// the property of Adobe Systems Incorporated and its suppliers,
+// if any.  The intellectual and technical concepts contained
+// herein are proprietary to Adobe Systems Incorporated and its
+// suppliers and are protected by trade secret or copyright law.
+// Dissemination of this information or reproduction of this material
+// is strictly forbidden unless prior written permission is obtained
+// from Adobe Systems Incorporated.
+
+// Architectures
+SUPPORTED_PLATFORMS = iphoneos iphonesimulator
+
+// -- Deployment -- //
+SKIP_INSTALL = YES
+
+// -- Packaging -- //
+PRODUCT_NAME = $(TARGET_NAME)
+
+// -- Search Paths -- //
+
+ROOT_DIR = ../../../../..
+SHARED_DIR = $(ROOT_DIR)/shared
+
+// shared defintions
+#include "../../../config/shared.xcconfig"
+
+PUPPET_HDR_PATHS = ../../PuppetWarpV4/source
+
+USER_HEADER_SEARCH_PATHS = ../../src $(SKETCHLIB_HDR_PATHS) $(PUPPET_HDR_PATHS) $(TBB_HDR_PATHS) $(SKETCHLIB_DIR)/shared/flann
+
+HEADER_SEARCH_PATHS = $(EIGEN_HDR_PATHS) $(OPTIMTOOLS_HDR_PATHS)
+
+GCC_PREPROCESSOR_DEFINITIONS = $(SKETCHLIB_DEFINES) $(OPTIMTOOLS_DEFINES) $(inherited)
+
+// Warnings triggered by puppet/optimtools headers
+GCC_WARN_UNUSED_VARIABLE = NO
+GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO
