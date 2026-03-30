@@ -36,6 +36,20 @@ const IDLE_X_ROTATION = 0.18
 const IDLE_Y_ROTATION = -0.2
 const IDLE_Z_ROTATION = 0
 const HAND_Y_AXIS_TO_ROBOT_Z_OFFSET = -Math.PI / 2
+const HAND_YAW_GAIN = 1.65
+const ROBOT_BONE_ALIASES = {
+  root: 'Bone',
+  headUpper: 'Bone.001',
+  neck: 'Bone.002',
+  leftShoulder: 'Bone.003.L',
+  leftElbow: 'Bone.004.L',
+  leftWrist: 'Bone.004.L.001',
+  leftLeg: 'Bone.005.L',
+  rightShoulder: 'Bone.003.R',
+  rightElbow: 'Bone.004.R',
+  rightWrist: 'Bone.004.R.001',
+  rightLeg: 'Bone.005.R',
+}
 
 function App() {
   const videoRef = useRef(null)
@@ -45,7 +59,19 @@ function App() {
   const streamRef = useRef(null)
   const animationFrameRef = useRef(0)
   const lastVideoTimeRef = useRef(-1)
+  const lastRenderTimeRef = useRef(0)
   const viewportRef = useRef({ width: 0, height: 0, dpr: 0 })
+  const previousHandTargetRef = useRef(null)
+  const handVelocityRef = useRef({ x: 0, y: 0, z: 0 })
+  const rigBonesRef = useRef({})
+  const bonePhysicsRef = useRef([])
+  const animationMixerRef = useRef(null)
+  const lookWaveActionRef = useRef(null)
+  const rootMotionRef = useRef({
+    time: 0,
+    position: new THREE.Vector3(),
+    velocity: new THREE.Vector3(),
+  })
   const handStateRef = useRef({
     visible: false,
     targetX: 0,
@@ -67,6 +93,58 @@ function App() {
     const lerpAngle = (current, target, alpha) => {
       const delta = Math.atan2(Math.sin(target - current), Math.cos(target - current))
       return current + delta * alpha
+    }
+
+    const updateBonePhysics = () => {
+      const entries = bonePhysicsRef.current
+      if (!entries.length || !robotRoot) {
+        return
+      }
+
+      const now = performance.now()
+      const motion = rootMotionRef.current
+      const dt = motion.time ? Math.max((now - motion.time) / 1000, 1 / 120) : 1 / 60
+      const position = robotRoot.position.clone()
+      const velocity = position.clone().sub(motion.position).divideScalar(dt)
+      const acceleration = velocity.clone().sub(motion.velocity).divideScalar(dt)
+
+      motion.time = now
+      motion.position.copy(position)
+      motion.velocity.copy(velocity)
+
+      const handVelocity = handVelocityRef.current
+      const lateralImpulse = THREE.MathUtils.clamp(
+        -velocity.x * 0.05 - acceleration.x * 0.008 + handVelocity.x * 0.03,
+        -1.4,
+        1.4,
+      )
+      const verticalImpulse = THREE.MathUtils.clamp(
+        velocity.y * 0.05 + acceleration.y * 0.01 + handVelocity.y * 0.035,
+        -1.4,
+        1.4,
+      )
+      const depthImpulse = THREE.MathUtils.clamp(
+        velocity.z * 0.035 + acceleration.z * 0.006 + handVelocity.z * 0.02,
+        -1,
+        1,
+      )
+
+      entries.forEach((entry) => {
+        entry.angularVelocity.x += (verticalImpulse * entry.verticalInfluence) * dt * 60
+        entry.angularVelocity.y += (depthImpulse * entry.depthInfluence * entry.sideSign) * dt * 60
+        entry.angularVelocity.z += (lateralImpulse * entry.lateralInfluence * entry.sideSign) * dt * 60
+
+        entry.angularVelocity.x += -entry.offset.x * entry.stiffness * dt * 60
+        entry.angularVelocity.y += -entry.offset.y * entry.stiffness * 0.7 * dt * 60
+        entry.angularVelocity.z += -entry.offset.z * entry.stiffness * dt * 60
+
+        entry.angularVelocity.multiplyScalar(entry.damping)
+        entry.offset.addScaledVector(entry.angularVelocity, dt * 60)
+
+        entry.bone.rotation.x = entry.baseRotation.x + entry.offset.x
+        entry.bone.rotation.y = entry.baseRotation.y + entry.offset.y
+        entry.bone.rotation.z = entry.baseRotation.z + entry.offset.z
+      })
     }
 
     const syncViewport = () => {
@@ -193,7 +271,11 @@ function App() {
       }
 
       const facingVector = palmNormal
-      const facingYaw = Math.atan2(-facingVector.x, facingVector.z)
+      const facingYaw = THREE.MathUtils.clamp(
+        Math.atan2(-facingVector.x, facingVector.z) * HAND_YAW_GAIN,
+        -Math.PI,
+        Math.PI,
+      )
       const facingPitch = THREE.MathUtils.clamp(
         Math.asin(THREE.MathUtils.clamp(facingVector.y, -1, 1)),
         -0.9,
@@ -201,10 +283,38 @@ function App() {
       )
       const handYAxisAngle = Math.atan2(middle3.y - wrist3.y, middle3.x - wrist3.x)
 
+      const targetX = (wrist.x - 0.5) * 7.2
+      const targetY = (0.5 - wrist.y) * 4.2
+      const targetZ = THREE.MathUtils.clamp(wrist.z * 8, -3.5, 1.5)
+      const now = performance.now()
+      const previousTarget = previousHandTargetRef.current
+
+      if (previousTarget) {
+        const dt = Math.max((now - previousTarget.time) / 1000, 1 / 120)
+        const nextVelocity = {
+          x: (targetX - previousTarget.x) / dt,
+          y: (targetY - previousTarget.y) / dt,
+          z: (targetZ - previousTarget.z) / dt,
+        }
+
+        handVelocityRef.current = {
+          x: THREE.MathUtils.lerp(handVelocityRef.current.x, nextVelocity.x, 0.22),
+          y: THREE.MathUtils.lerp(handVelocityRef.current.y, nextVelocity.y, 0.22),
+          z: THREE.MathUtils.lerp(handVelocityRef.current.z, nextVelocity.z, 0.22),
+        }
+      }
+
+      previousHandTargetRef.current = {
+        x: targetX,
+        y: targetY,
+        z: targetZ,
+        time: now,
+      }
+
       handStateRef.current.visible = true
-      handStateRef.current.targetX = (wrist.x - 0.5) * 7.2
-      handStateRef.current.targetY = (0.5 - wrist.y) * 4.2
-      handStateRef.current.targetZ = THREE.MathUtils.clamp(wrist.z * 8, -3.5, 1.5)
+      handStateRef.current.targetX = targetX
+      handStateRef.current.targetY = targetY
+      handStateRef.current.targetZ = targetZ
       handStateRef.current.targetYaw = facingYaw
       handStateRef.current.targetPitch = facingPitch
       handStateRef.current.targetSpin = handYAxisAngle + HAND_Y_AXIS_TO_ROBOT_Z_OFFSET
@@ -249,6 +359,19 @@ function App() {
       robotRoot = gltf.scene
       robotRoot.rotation.set(IDLE_X_ROTATION, IDLE_Y_ROTATION, IDLE_Z_ROTATION)
 
+      const mixer = new THREE.AnimationMixer(robotRoot)
+      animationMixerRef.current = mixer
+      const lookWaveClip =
+        gltf.animations.find((clip) => clip.name === 'Look_Wave') ?? null
+
+      if (lookWaveClip) {
+        const lookWaveAction = mixer.clipAction(lookWaveClip)
+        lookWaveAction.clampWhenFinished = true
+        lookWaveAction.loop = THREE.LoopOnce
+        lookWaveAction.enabled = true
+        lookWaveActionRef.current = lookWaveAction
+      }
+
       const bounds = new THREE.Box3().setFromObject(robotRoot)
       const size = bounds.getSize(new THREE.Vector3())
       const center = bounds.getCenter(new THREE.Vector3())
@@ -259,6 +382,54 @@ function App() {
       robotRoot.position.sub(center.multiplyScalar(scale))
       robotRoot.position.y -= (size.y * scale) * 0.46
 
+      const rigBones = Object.fromEntries(
+        Object.entries(ROBOT_BONE_ALIASES).map(([alias, boneName]) => [
+          alias,
+          robotRoot.getObjectByName(boneName) ?? null,
+        ]),
+      )
+      rigBonesRef.current = rigBones
+      rootMotionRef.current = {
+        time: performance.now(),
+        position: robotRoot.position.clone(),
+        velocity: new THREE.Vector3(),
+      }
+
+      const rootBone = rigBones.root
+      const physicsEntries = []
+
+      robotRoot.traverse((object) => {
+        if (!object.isBone || object === rootBone) {
+          return
+        }
+
+        let depth = 0
+        let current = object.parent
+        while (current) {
+          if (current.isBone) {
+            depth += 1
+          }
+          current = current.parent
+        }
+
+        const sideSign = object.name.includes('.L') ? -1 : object.name.includes('.R') ? 1 : 0
+        const influenceBase = 0.18 + depth * 0.08
+
+        physicsEntries.push({
+          bone: object,
+          baseRotation: object.rotation.clone(),
+          sideSign,
+          stiffness: Math.max(0.1, 0.28 - depth * 0.04),
+          damping: Math.min(0.92, 0.76 + depth * 0.05),
+          lateralInfluence: influenceBase * (sideSign === 0 ? 0.65 : 1.1),
+          verticalInfluence: influenceBase * 0.95,
+          depthInfluence: influenceBase * 0.7,
+          offset: new THREE.Vector3(),
+          angularVelocity: new THREE.Vector3(),
+        })
+      })
+
+      bonePhysicsRef.current = physicsEntries
       scene.add(robotRoot)
       syncViewport()
     }
@@ -270,15 +441,25 @@ function App() {
 
       const handState = handStateRef.current
       const resized = syncViewport()
+      const now = performance.now()
+      const deltaSeconds = lastRenderTimeRef.current
+        ? Math.min((now - lastRenderTimeRef.current) / 1000, 1 / 20)
+        : 1 / 60
+      lastRenderTimeRef.current = now
 
       if (handState.visible) {
         robotRoot.position.x = THREE.MathUtils.lerp(robotRoot.position.x, handState.targetX, 0.12)
         robotRoot.position.y = THREE.MathUtils.lerp(robotRoot.position.y, handState.targetY, 0.12)
         robotRoot.position.z = THREE.MathUtils.lerp(robotRoot.position.z, handState.targetZ, 0.12)
         robotRoot.rotation.x = THREE.MathUtils.lerp(robotRoot.rotation.x, handState.targetPitch, 0.12)
-        robotRoot.rotation.y = lerpAngle(robotRoot.rotation.y, handState.targetYaw, 0.12)
+        robotRoot.rotation.y = lerpAngle(robotRoot.rotation.y, handState.targetYaw, 0.24)
         robotRoot.rotation.z = lerpAngle(robotRoot.rotation.z, handState.targetSpin, 0.16)
       } else {
+        handVelocityRef.current = {
+          x: THREE.MathUtils.lerp(handVelocityRef.current.x, 0, 0.08),
+          y: THREE.MathUtils.lerp(handVelocityRef.current.y, 0, 0.08),
+          z: THREE.MathUtils.lerp(handVelocityRef.current.z, 0, 0.08),
+        }
         robotRoot.position.x = THREE.MathUtils.lerp(robotRoot.position.x, 0, 0.06)
         robotRoot.position.y = THREE.MathUtils.lerp(robotRoot.position.y, -1.15, 0.06)
         robotRoot.position.z = THREE.MathUtils.lerp(robotRoot.position.z, 0, 0.06)
@@ -286,6 +467,9 @@ function App() {
         robotRoot.rotation.y = lerpAngle(robotRoot.rotation.y, IDLE_Y_ROTATION, 0.06)
         robotRoot.rotation.z = lerpAngle(robotRoot.rotation.z, IDLE_Z_ROTATION, 0.06)
       }
+
+      updateBonePhysics()
+      animationMixerRef.current?.update(deltaSeconds)
 
       if (resized) {
         renderer.render(scene, camera)
@@ -386,6 +570,11 @@ function App() {
       handLandmarkerRef.current = null
       streamRef.current?.getTracks().forEach((track) => track.stop())
       streamRef.current = null
+      rigBonesRef.current = {}
+      bonePhysicsRef.current = []
+      lookWaveActionRef.current = null
+      animationMixerRef.current?.stopAllAction()
+      animationMixerRef.current = null
       renderer?.dispose()
     }
   }, [])
