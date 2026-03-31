@@ -31,7 +31,6 @@ const HAND_CONNECTIONS = [
 const WASM_URL = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm'
 const MODEL_URL =
   'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task'
-const ROBOT_URL = '/robot.glb'
 const IDLE_X_ROTATION = 0.18
 const IDLE_Y_ROTATION = -0.2
 const IDLE_Z_ROTATION = 0
@@ -41,6 +40,7 @@ const HAND_NEAR_SIZE = 0.48
 const HAND_FAR_SIZE = 0.04
 const ROBOT_NEAR_SCALE = 2.6
 const ROBOT_FAR_SCALE = 0.2
+const FIST_CLOSURE_OFFSET = 0.3
 const ROBOT_BONE_ALIASES = {
   root: 'Bone',
   headUpper: 'Bone.001',
@@ -55,7 +55,28 @@ const ROBOT_BONE_ALIASES = {
   rightLeg: 'Bone.005.R',
 }
 
+function getExperienceConfig(pathname) {
+  const normalizedPath = pathname.replace(/\/+$/, '') || '/'
+
+  if (normalizedPath === '/octopus') {
+    return {
+      modelUrl: '/robot-octopus.glb',
+      modelYawOffset: -Math.PI / 2,
+      handYOffset: 0.7,
+      statusText: 'Move one hand in front of the camera to steer the octopus.',
+    }
+  }
+
+  return {
+    modelUrl: '/robot-root.glb',
+    modelYawOffset: 0,
+    handYOffset: 0,
+    statusText: 'Move one hand in front of the camera to steer the robot.',
+  }
+}
+
 function App() {
+  const experienceConfigRef = useRef(getExperienceConfig(window.location.pathname))
   const videoRef = useRef(null)
   const overlayCanvasRef = useRef(null)
   const sceneCanvasRef = useRef(null)
@@ -71,6 +92,7 @@ function App() {
   const bonePhysicsRef = useRef([])
   const animationMixerRef = useRef(null)
   const animationActionsRef = useRef({})
+  const previousFistRef = useRef(false)
   const baseRobotScaleRef = useRef(1)
   const rootMotionRef = useRef({
     time: 0,
@@ -90,6 +112,7 @@ function App() {
   const [status, setStatus] = useState('Loading camera, hand tracking, and robot...')
 
   useEffect(() => {
+    const experienceConfig = experienceConfigRef.current
     let cancelled = false
     let renderer = null
     let scene = null
@@ -99,6 +122,30 @@ function App() {
     const lerpAngle = (current, target, alpha) => {
       const delta = Math.atan2(Math.sin(target - current), Math.cos(target - current))
       return current + delta * alpha
+    }
+
+    const playAnimation = (name) => {
+      const actions = animationActionsRef.current
+      const nextAction = actions[name]
+      const mixer = animationMixerRef.current
+
+      if (!nextAction || !mixer) {
+        return
+      }
+
+      Object.values(actions).forEach((action) => {
+        if (action !== nextAction) {
+          action.stop()
+        }
+      })
+
+      nextAction.reset()
+      nextAction.paused = false
+      nextAction.enabled = true
+      nextAction.setEffectiveTimeScale(1)
+      nextAction.setEffectiveWeight(1)
+      nextAction.play()
+      mixer.setTime(0)
     }
 
     const updateBonePhysics = () => {
@@ -219,13 +266,21 @@ function App() {
 
       if (!primaryHand) {
         handStateRef.current.visible = false
+        previousFistRef.current = false
         return
       }
 
       const wrist = primaryHand[0]
+      const thumbTip = primaryHand[4]
+      const indexBaseKnuckle = primaryHand[5]
+      const indexTip = primaryHand[8]
       const middleBase = primaryHand[9]
+      const middleTip = primaryHand[12]
+      const ringBase = primaryHand[13]
+      const ringTip = primaryHand[16]
       const indexBase = primaryHand[5]
       const pinkyBase = primaryHand[17]
+      const pinkyTip = primaryHand[20]
 
       const toVector3 = (point) => new THREE.Vector3(point.x, -point.y, point.z)
       const wrist3 = toVector3(wrist)
@@ -242,7 +297,8 @@ function App() {
 
       const facingVector = palmNormal
       const facingYaw = THREE.MathUtils.clamp(
-        Math.atan2(-facingVector.x, facingVector.z) * HAND_YAW_GAIN,
+        Math.atan2(-facingVector.x, facingVector.z) * HAND_YAW_GAIN +
+          experienceConfig.modelYawOffset,
         -Math.PI,
         Math.PI,
       )
@@ -257,7 +313,7 @@ function App() {
       const handSize = (palmWidth + palmLength) * 0.5
 
       const targetX = (wrist.x - 0.5) * 7.2
-      const targetY = (0.5 - wrist.y) * 4.2
+      const targetY = (0.5 - wrist.y) * 4.2 + experienceConfig.handYOffset
       const targetZ = THREE.MathUtils.clamp(wrist.z * 8, -3.5, 1.5)
       const depthProgress = THREE.MathUtils.clamp(
         (handSize - HAND_FAR_SIZE) / (HAND_NEAR_SIZE - HAND_FAR_SIZE),
@@ -267,6 +323,35 @@ function App() {
       const targetScale =
         baseRobotScaleRef.current *
         THREE.MathUtils.lerp(ROBOT_FAR_SCALE, ROBOT_NEAR_SCALE, depthProgress)
+      const fingerClosures = [
+        [thumbTip, indexBaseKnuckle],
+        [indexTip, indexBase],
+        [middleTip, middleBase],
+        [ringTip, ringBase],
+        [pinkyTip, pinkyBase],
+      ].map(([tip, base]) => {
+        const tipDistance = Math.hypot(tip.x - wrist.x, tip.y - wrist.y)
+        const baseDistance = Math.hypot(base.x - wrist.x, base.y - wrist.y)
+        if (baseDistance <= 0.0001) {
+          return 0
+        }
+
+        return THREE.MathUtils.clamp(1 - tipDistance / baseDistance, 0, 1)
+      })
+      const rawFistClosure =
+        fingerClosures.reduce((sum, value) => sum + value, 0) / fingerClosures.length
+      const fistClosure = THREE.MathUtils.clamp(
+        (rawFistClosure - FIST_CLOSURE_OFFSET) / (1 - FIST_CLOSURE_OFFSET),
+        0,
+        1,
+      )
+      const isFist = fistClosure >= 0.56
+
+      if (isFist && !previousFistRef.current) {
+        playAnimation('Look_Wave')
+      }
+
+      previousFistRef.current = isFist
       const now = performance.now()
       const previousTarget = previousHandTargetRef.current
 
@@ -332,7 +417,7 @@ function App() {
       scene.add(rimLight)
 
       const loader = new GLTFLoader()
-      const gltf = await loader.loadAsync(ROBOT_URL)
+      const gltf = await loader.loadAsync(experienceConfig.modelUrl)
 
       if (cancelled) {
         return
@@ -465,7 +550,11 @@ function App() {
         )
         robotRoot.scale.setScalar(nextScale)
         robotRoot.rotation.x = THREE.MathUtils.lerp(robotRoot.rotation.x, IDLE_X_ROTATION, 0.06)
-        robotRoot.rotation.y = lerpAngle(robotRoot.rotation.y, IDLE_Y_ROTATION, 0.06)
+        robotRoot.rotation.y = lerpAngle(
+          robotRoot.rotation.y,
+          IDLE_Y_ROTATION + experienceConfig.modelYawOffset,
+          0.06,
+        )
         robotRoot.rotation.z = lerpAngle(robotRoot.rotation.z, IDLE_Z_ROTATION, 0.06)
       }
 
@@ -526,7 +615,7 @@ function App() {
 
         handLandmarkerRef.current = handLandmarker
         syncViewport()
-        setStatus('Move one hand in front of the camera to steer the robot.')
+        setStatus(experienceConfig.statusText)
 
         const processVideo = () => {
           const activeVideo = videoRef.current
