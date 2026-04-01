@@ -58,11 +58,28 @@ const ROBOT_BONE_ALIASES = {
 function getExperienceConfig(pathname) {
   const normalizedPath = pathname.replace(/\/+$/, '') || '/'
 
+  if (normalizedPath === '/mouth') {
+    return {
+      modelUrl: '/mouth.glb',
+      modelYawOffset: Math.PI,
+      modelSpinOffset: Math.PI / 2,
+      handYOffset: 0.55,
+      handZOffset: -0.6,
+      jawBoneName: 'Human_-_Lower_Jaw_1',
+      jawAxis: 'x',
+      jawOpenAngle: 1.2,
+      jawOpenStart: 0.45,
+      statusText: 'Move one hand in front of the camera to steer the mouth experience.',
+    }
+  }
+
   if (normalizedPath === '/octopus') {
     return {
       modelUrl: '/robot-octopus.glb',
       modelYawOffset: -Math.PI / 2,
+      modelSpinOffset: HAND_Y_AXIS_TO_ROBOT_Z_OFFSET,
       handYOffset: 0.7,
+      handZOffset: 0,
       statusText: 'Move one hand in front of the camera to steer the octopus.',
     }
   }
@@ -70,7 +87,13 @@ function getExperienceConfig(pathname) {
   return {
     modelUrl: '/robot-root.glb',
     modelYawOffset: 0,
+    modelSpinOffset: HAND_Y_AXIS_TO_ROBOT_Z_OFFSET,
     handYOffset: 0,
+    handZOffset: 0,
+    jawBoneName: null,
+    jawAxis: 'x',
+    jawOpenAngle: 0,
+    jawOpenStart: 0,
     statusText: 'Move one hand in front of the camera to steer the robot.',
   }
 }
@@ -94,6 +117,9 @@ function App() {
   const animationActionsRef = useRef({})
   const previousFistRef = useRef(false)
   const baseRobotScaleRef = useRef(1)
+  const jawBoneRef = useRef(null)
+  const jawBaseRotationRef = useRef(null)
+  const jawOpenProgressRef = useRef(0)
   const rootMotionRef = useRef({
     time: 0,
     position: new THREE.Vector3(),
@@ -108,6 +134,7 @@ function App() {
     targetPitch: 0,
     targetSpin: 0,
     targetScale: 1,
+    targetJawOpen: 0,
   })
   const [status, setStatus] = useState('Loading camera, hand tracking, and robot...')
 
@@ -167,19 +194,19 @@ function App() {
 
       const handVelocity = handVelocityRef.current
       const lateralImpulse = THREE.MathUtils.clamp(
-        -velocity.x * 0.03 - acceleration.x * 0.004 + handVelocity.x * 0.018,
-        -0.85,
-        0.85,
+        -velocity.x * 0.01 - acceleration.x * 0.0015 + handVelocity.x * 0.006,
+        -0.2,
+        0.2,
       )
       const verticalImpulse = THREE.MathUtils.clamp(
-        velocity.y * 0.03 + acceleration.y * 0.005 + handVelocity.y * 0.02,
-        -0.85,
-        0.85,
+        velocity.y * 0.01 + acceleration.y * 0.0015 + handVelocity.y * 0.006,
+        -0.2,
+        0.2,
       )
       const depthImpulse = THREE.MathUtils.clamp(
-        velocity.z * 0.022 + acceleration.z * 0.003 + handVelocity.z * 0.014,
-        -0.6,
-        0.6,
+        velocity.z * 0.008 + acceleration.z * 0.001 + handVelocity.z * 0.004,
+        -0.16,
+        0.16,
       )
 
       entries.forEach((entry) => {
@@ -266,6 +293,7 @@ function App() {
 
       if (!primaryHand) {
         handStateRef.current.visible = false
+        handStateRef.current.targetJawOpen = 0
         previousFistRef.current = false
         return
       }
@@ -314,7 +342,7 @@ function App() {
 
       const targetX = (wrist.x - 0.5) * 7.2
       const targetY = (0.5 - wrist.y) * 4.2 + experienceConfig.handYOffset
-      const targetZ = THREE.MathUtils.clamp(wrist.z * 8, -3.5, 1.5)
+      const targetZ = THREE.MathUtils.clamp(wrist.z * 8, -3.5, 1.5) + experienceConfig.handZOffset
       const depthProgress = THREE.MathUtils.clamp(
         (handSize - HAND_FAR_SIZE) / (HAND_NEAR_SIZE - HAND_FAR_SIZE),
         0,
@@ -338,6 +366,22 @@ function App() {
 
         return THREE.MathUtils.clamp(1 - tipDistance / baseDistance, 0, 1)
       })
+      const fingerOpenness = [
+        [thumbTip, indexBaseKnuckle, 0.65],
+        [indexTip, indexBase, 0.95],
+        [middleTip, middleBase, 0.95],
+        [ringTip, ringBase, 0.95],
+        [pinkyTip, pinkyBase, 0.9],
+      ].map(([tip, base, maxExtraReach]) => {
+        const tipDistance = Math.hypot(tip.x - wrist.x, tip.y - wrist.y)
+        const baseDistance = Math.hypot(base.x - wrist.x, base.y - wrist.y)
+        if (baseDistance <= 0.0001) {
+          return 0
+        }
+
+        const reachRatio = tipDistance / baseDistance
+        return THREE.MathUtils.clamp((reachRatio - 1) / maxExtraReach, 0, 1)
+      })
       const rawFistClosure =
         fingerClosures.reduce((sum, value) => sum + value, 0) / fingerClosures.length
       const fistClosure = THREE.MathUtils.clamp(
@@ -346,6 +390,13 @@ function App() {
         1,
       )
       const isFist = fistClosure >= 0.56
+      const rawJawOpen =
+        fingerOpenness.reduce((sum, value) => sum + value, 0) / fingerOpenness.length
+      const jawOpen = THREE.MathUtils.clamp(
+        (rawJawOpen - experienceConfig.jawOpenStart) / (1 - experienceConfig.jawOpenStart),
+        0,
+        1,
+      )
 
       if (isFist && !previousFistRef.current) {
         playAnimation('Look_Wave')
@@ -383,8 +434,9 @@ function App() {
       handStateRef.current.targetZ = targetZ
       handStateRef.current.targetYaw = facingYaw
       handStateRef.current.targetPitch = facingPitch
-      handStateRef.current.targetSpin = handYAxisAngle + HAND_Y_AXIS_TO_ROBOT_Z_OFFSET
+      handStateRef.current.targetSpin = -handYAxisAngle + experienceConfig.modelSpinOffset
       handStateRef.current.targetScale = targetScale
+      handStateRef.current.targetJawOpen = jawOpen
     }
 
     const startThreeScene = async () => {
@@ -448,6 +500,11 @@ function App() {
       robotRoot.scale.setScalar(scale)
       robotRoot.position.sub(center.multiplyScalar(scale))
       robotRoot.position.y -= (size.y * scale) * 0.46
+      jawBoneRef.current = experienceConfig.jawBoneName
+        ? robotRoot.getObjectByName(experienceConfig.jawBoneName) ?? null
+        : null
+      jawBaseRotationRef.current = jawBoneRef.current ? jawBoneRef.current.rotation.clone() : null
+      jawOpenProgressRef.current = 0
 
       const rigBones = Object.fromEntries(
         Object.entries(ROBOT_BONE_ALIASES).map(([alias, boneName]) => [
@@ -466,7 +523,11 @@ function App() {
       const physicsEntries = []
 
       robotRoot.traverse((object) => {
-        if (!object.isBone || object === rootBone) {
+        if (
+          !object.isBone ||
+          object === rootBone ||
+          (experienceConfig.jawBoneName && object.name === experienceConfig.jawBoneName)
+        ) {
           return
         }
 
@@ -480,7 +541,7 @@ function App() {
         }
 
         const sideSign = object.name.includes('.L') ? -1 : object.name.includes('.R') ? 1 : 0
-        const influenceBase = 0.18 + depth * 0.08
+        const influenceBase = 0.06 + depth * 0.03
         const isNeck = object.name === ROBOT_BONE_ALIASES.neck
 
         physicsEntries.push({
@@ -488,16 +549,16 @@ function App() {
           baseRotation: object.rotation.clone(),
           sideSign,
           stiffness: isNeck
-            ? Math.max(0.24, 0.46 - depth * 0.025)
-            : Math.max(0.16, 0.34 - depth * 0.035),
+            ? Math.max(0.42, 0.62 - depth * 0.02)
+            : Math.max(0.3, 0.5 - depth * 0.025),
           damping: isNeck
-            ? Math.min(0.985, 0.93 + depth * 0.02)
-            : Math.min(0.96, 0.84 + depth * 0.035),
+            ? Math.min(0.995, 0.975 + depth * 0.008)
+            : Math.min(0.988, 0.95 + depth * 0.015),
           lateralInfluence: isNeck
-            ? influenceBase * 0.18
-            : influenceBase * (sideSign === 0 ? 0.45 : 0.78),
-          verticalInfluence: isNeck ? influenceBase * 0.24 : influenceBase * 0.68,
-          depthInfluence: isNeck ? influenceBase * 0.16 : influenceBase * 0.5,
+            ? influenceBase * 0.08
+            : influenceBase * (sideSign === 0 ? 0.18 : 0.3),
+          verticalInfluence: isNeck ? influenceBase * 0.1 : influenceBase * 0.24,
+          depthInfluence: isNeck ? influenceBase * 0.07 : influenceBase * 0.18,
           offset: new THREE.Vector3(),
           angularVelocity: new THREE.Vector3(),
         })
@@ -559,6 +620,22 @@ function App() {
       }
 
       updateBonePhysics()
+
+      if (jawBoneRef.current && jawBaseRotationRef.current && experienceConfig.jawOpenAngle > 0) {
+        const targetJawOpen = handState.visible ? handState.targetJawOpen : 0
+        jawOpenProgressRef.current = THREE.MathUtils.lerp(
+          jawOpenProgressRef.current,
+          targetJawOpen,
+          0.28,
+        )
+        const jawBaseRotation = jawBaseRotationRef.current
+        const jawOpenRotation = jawOpenProgressRef.current * experienceConfig.jawOpenAngle
+
+        jawBoneRef.current.rotation.x = jawBaseRotation.x - jawOpenRotation
+        jawBoneRef.current.rotation.y = jawBaseRotation.y
+        jawBoneRef.current.rotation.z = jawBaseRotation.z
+      }
+
       animationMixerRef.current?.update(deltaSeconds)
 
       if (resized) {
@@ -663,6 +740,9 @@ function App() {
       rigBonesRef.current = {}
       bonePhysicsRef.current = []
       animationActionsRef.current = {}
+      jawBoneRef.current = null
+      jawBaseRotationRef.current = null
+      jawOpenProgressRef.current = 0
       animationMixerRef.current?.stopAllAction()
       animationMixerRef.current = null
       renderer?.dispose()
