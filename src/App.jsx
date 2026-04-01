@@ -55,6 +55,16 @@ const ROBOT_BONE_ALIASES = {
   rightLeg: 'Bone.005.R',
 }
 
+const BEAR_PART_LABELS = {
+  'Material.001': 'Head',
+  'Material.002': 'Arms',
+  'Material.003': 'Body',
+  'Material.004': 'Ears',
+  'Material.005': 'Hands',
+  'Material.006': 'Legs',
+  'Material.007': 'Waist',
+}
+
 function getExperienceConfig(pathname) {
   const normalizedPath = pathname.replace(/\/+$/, '') || '/'
 
@@ -68,6 +78,7 @@ function getExperienceConfig(pathname) {
       handYOffset: 1.1,
       handZOffset: 0,
       lockToTrackingPlane: true,
+      idlePosition: { x: 0, y: 0, z: 0 },
       jawBoneName: null,
       jawAxis: 'x',
       jawOpenAngle: 0,
@@ -86,6 +97,7 @@ function getExperienceConfig(pathname) {
       handYOffset: 0.55,
       handZOffset: -0.6,
       lockToTrackingPlane: false,
+      idlePosition: { x: 0, y: -1.15, z: 0 },
       jawBoneName: 'Human_-_Lower_Jaw_1',
       jawAxis: 'x',
       jawOpenAngle: 1.2,
@@ -104,6 +116,7 @@ function getExperienceConfig(pathname) {
       handYOffset: 0.7,
       handZOffset: 0,
       lockToTrackingPlane: false,
+      idlePosition: { x: 0, y: -1.15, z: 0 },
       statusText: 'Move one hand in front of the camera to steer the octopus.',
     }
   }
@@ -117,6 +130,7 @@ function getExperienceConfig(pathname) {
     handYOffset: 0,
     handZOffset: 0,
     lockToTrackingPlane: false,
+    idlePosition: { x: 0, y: -1.15, z: 0 },
     jawBoneName: null,
     jawAxis: 'x',
     jawOpenAngle: 0,
@@ -126,7 +140,8 @@ function getExperienceConfig(pathname) {
 }
 
 function App() {
-  const experienceConfigRef = useRef(getExperienceConfig(window.location.pathname))
+  const [experienceConfig] = useState(() => getExperienceConfig(window.location.pathname))
+  const isBearRoute = experienceConfig.modelUrl === '/bear.glb'
   const videoRef = useRef(null)
   const overlayCanvasRef = useRef(null)
   const sceneCanvasRef = useRef(null)
@@ -147,6 +162,7 @@ function App() {
   const jawBoneRef = useRef(null)
   const jawBaseRotationRef = useRef(null)
   const jawOpenProgressRef = useRef(0)
+  const bearPartMaterialsRef = useRef({})
   const rootMotionRef = useRef({
     time: 0,
     position: new THREE.Vector3(),
@@ -164,9 +180,9 @@ function App() {
     targetJawOpen: 0,
   })
   const [status, setStatus] = useState('Loading camera, hand tracking, and robot...')
+  const [bearParts, setBearParts] = useState([])
 
   useEffect(() => {
-    const experienceConfig = experienceConfigRef.current
     let cancelled = false
     let renderer = null
     let scene = null
@@ -534,6 +550,60 @@ function App() {
       robotRoot.scale.setScalar(scale)
       robotRoot.position.sub(center.multiplyScalar(scale))
       robotRoot.position.y -= (size.y * scale) * 0.46
+
+      if (isBearRoute) {
+        const nextBearParts = []
+        const nextBearPartMaterials = {}
+
+        robotRoot.traverse((object) => {
+          if (!object.isMesh || !object.material) {
+            return
+          }
+
+          const materials = Array.isArray(object.material) ? object.material : [object.material]
+          const clonedMaterials = materials.map((material, index) => {
+            const clonedMaterial = material.clone()
+            clonedMaterial.color.set('#ffffff')
+            clonedMaterial.map = null
+            clonedMaterial.emissiveMap = null
+            clonedMaterial.aoMap = null
+            clonedMaterial.metalnessMap = null
+            clonedMaterial.roughnessMap = null
+            clonedMaterial.normalMap = null
+            clonedMaterial.clearcoatMap = null
+            clonedMaterial.clearcoatRoughnessMap = null
+            clonedMaterial.sheenColorMap = null
+            clonedMaterial.specularColorMap = null
+            clonedMaterial.specularIntensityMap = null
+            clonedMaterial.alphaMap = null
+            clonedMaterial.needsUpdate = true
+            const partId = `${object.uuid}:${index}`
+            const partLabel =
+              BEAR_PART_LABELS[material.name] ||
+              material.name ||
+              object.name ||
+              `Part ${nextBearParts.length + 1}`
+
+            nextBearPartMaterials[partId] = clonedMaterial
+            nextBearParts.push({
+              id: partId,
+              label: partLabel,
+              color: `#${clonedMaterial.color.getHexString()}`,
+            })
+
+            return clonedMaterial
+          })
+
+          object.material = Array.isArray(object.material) ? clonedMaterials : clonedMaterials[0]
+        })
+
+        bearPartMaterialsRef.current = nextBearPartMaterials
+        setBearParts(nextBearParts)
+      } else {
+        bearPartMaterialsRef.current = {}
+        setBearParts([])
+      }
+
       jawBoneRef.current = experienceConfig.jawBoneName
         ? robotRoot.getObjectByName(experienceConfig.jawBoneName) ?? null
         : null
@@ -635,9 +705,21 @@ function App() {
           y: THREE.MathUtils.lerp(handVelocityRef.current.y, 0, 0.08),
           z: THREE.MathUtils.lerp(handVelocityRef.current.z, 0, 0.08),
         }
-        robotRoot.position.x = THREE.MathUtils.lerp(robotRoot.position.x, 0, 0.06)
-        robotRoot.position.y = THREE.MathUtils.lerp(robotRoot.position.y, -1.15, 0.06)
-        robotRoot.position.z = THREE.MathUtils.lerp(robotRoot.position.z, 0, 0.06)
+        robotRoot.position.x = THREE.MathUtils.lerp(
+          robotRoot.position.x,
+          experienceConfig.idlePosition.x,
+          0.06,
+        )
+        robotRoot.position.y = THREE.MathUtils.lerp(
+          robotRoot.position.y,
+          experienceConfig.idlePosition.y,
+          0.06,
+        )
+        robotRoot.position.z = THREE.MathUtils.lerp(
+          robotRoot.position.z,
+          experienceConfig.idlePosition.z,
+          0.06,
+        )
         const nextScale = THREE.MathUtils.lerp(
           robotRoot.scale.x,
           baseRobotScaleRef.current,
@@ -781,11 +863,25 @@ function App() {
       jawBoneRef.current = null
       jawBaseRotationRef.current = null
       jawOpenProgressRef.current = 0
+      bearPartMaterialsRef.current = {}
+      setBearParts([])
       animationMixerRef.current?.stopAllAction()
       animationMixerRef.current = null
       renderer?.dispose()
     }
-  }, [])
+  }, [experienceConfig, isBearRoute])
+
+  const handleBearPartColorChange = (partId, color) => {
+    const material = bearPartMaterialsRef.current[partId]
+    if (!material?.color) {
+      return
+    }
+
+    material.color.set(color)
+    setBearParts((currentParts) =>
+      currentParts.map((part) => (part.id === partId ? { ...part, color } : part)),
+    )
+  }
 
   return (
     <main className="app-shell">
@@ -793,6 +889,21 @@ function App() {
       <canvas ref={sceneCanvasRef} className="scene-overlay" />
       <canvas ref={overlayCanvasRef} className="tracking-overlay" />
       <div className="status-chip">{status}</div>
+      {isBearRoute && bearParts.length > 0 ? (
+        <aside className="bear-controls">
+          <div className="bear-controls-title">Bear Parts</div>
+          {bearParts.map((part) => (
+            <label key={part.id} className="bear-control-row">
+              <span>{part.label}</span>
+              <input
+                type="color"
+                value={part.color}
+                onChange={(event) => handleBearPartColorChange(part.id, event.target.value)}
+              />
+            </label>
+          ))}
+        </aside>
+      ) : null}
     </main>
   )
 }
