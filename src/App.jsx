@@ -58,13 +58,34 @@ const ROBOT_BONE_ALIASES = {
 function getExperienceConfig(pathname) {
   const normalizedPath = pathname.replace(/\/+$/, '') || '/'
 
+  if (normalizedPath === '/bear') {
+    return {
+      modelUrl: '/bear.glb',
+      modelPitchOffset: 0,
+      modelYawOffset: 0,
+      modelSpinSign: 1,
+      modelSpinOffset: HAND_Y_AXIS_TO_ROBOT_Z_OFFSET,
+      handYOffset: 1.1,
+      handZOffset: 0,
+      lockToTrackingPlane: true,
+      jawBoneName: null,
+      jawAxis: 'x',
+      jawOpenAngle: 0,
+      jawOpenStart: 0,
+      statusText: 'Move one hand in front of the camera to steer the bear.',
+    }
+  }
+
   if (normalizedPath === '/mouth') {
     return {
       modelUrl: '/mouth.glb',
+      modelPitchOffset: 0,
       modelYawOffset: Math.PI,
+      modelSpinSign: -1,
       modelSpinOffset: Math.PI / 2,
       handYOffset: 0.55,
       handZOffset: -0.6,
+      lockToTrackingPlane: false,
       jawBoneName: 'Human_-_Lower_Jaw_1',
       jawAxis: 'x',
       jawOpenAngle: 1.2,
@@ -76,20 +97,26 @@ function getExperienceConfig(pathname) {
   if (normalizedPath === '/octopus') {
     return {
       modelUrl: '/robot-octopus.glb',
+      modelPitchOffset: 0,
       modelYawOffset: -Math.PI / 2,
+      modelSpinSign: -1,
       modelSpinOffset: HAND_Y_AXIS_TO_ROBOT_Z_OFFSET,
       handYOffset: 0.7,
       handZOffset: 0,
+      lockToTrackingPlane: false,
       statusText: 'Move one hand in front of the camera to steer the octopus.',
     }
   }
 
   return {
     modelUrl: '/robot-root.glb',
+    modelPitchOffset: 0,
     modelYawOffset: 0,
+    modelSpinSign: -1,
     modelSpinOffset: HAND_Y_AXIS_TO_ROBOT_Z_OFFSET,
     handYOffset: 0,
     handZOffset: 0,
+    lockToTrackingPlane: false,
     jawBoneName: null,
     jawAxis: 'x',
     jawOpenAngle: 0,
@@ -334,7 +361,7 @@ function App() {
         Math.asin(THREE.MathUtils.clamp(facingVector.y, -1, 1)),
         -0.9,
         0.9,
-      )
+      ) + experienceConfig.modelPitchOffset
       const handYAxisAngle = Math.atan2(middle3.y - wrist3.y, middle3.x - wrist3.x)
       const palmWidth = Math.hypot(indexBase.x - pinkyBase.x, indexBase.y - pinkyBase.y)
       const palmLength = Math.hypot(middleBase.x - wrist.x, middleBase.y - wrist.y)
@@ -342,7 +369,9 @@ function App() {
 
       const targetX = (wrist.x - 0.5) * 7.2
       const targetY = (0.5 - wrist.y) * 4.2 + experienceConfig.handYOffset
-      const targetZ = THREE.MathUtils.clamp(wrist.z * 8, -3.5, 1.5) + experienceConfig.handZOffset
+      const targetZ = experienceConfig.lockToTrackingPlane
+        ? experienceConfig.handZOffset
+        : THREE.MathUtils.clamp(wrist.z * 8, -3.5, 1.5) + experienceConfig.handZOffset
       const depthProgress = THREE.MathUtils.clamp(
         (handSize - HAND_FAR_SIZE) / (HAND_NEAR_SIZE - HAND_FAR_SIZE),
         0,
@@ -434,7 +463,8 @@ function App() {
       handStateRef.current.targetZ = targetZ
       handStateRef.current.targetYaw = facingYaw
       handStateRef.current.targetPitch = facingPitch
-      handStateRef.current.targetSpin = -handYAxisAngle + experienceConfig.modelSpinOffset
+      handStateRef.current.targetSpin =
+        handYAxisAngle * experienceConfig.modelSpinSign + experienceConfig.modelSpinOffset
       handStateRef.current.targetScale = targetScale
       handStateRef.current.targetJawOpen = jawOpen
     }
@@ -476,7 +506,11 @@ function App() {
       }
 
       robotRoot = gltf.scene
-      robotRoot.rotation.set(IDLE_X_ROTATION, IDLE_Y_ROTATION, IDLE_Z_ROTATION)
+      robotRoot.rotation.set(
+        IDLE_X_ROTATION + experienceConfig.modelPitchOffset,
+        IDLE_Y_ROTATION,
+        IDLE_Z_ROTATION,
+      )
 
       const mixer = new THREE.AnimationMixer(robotRoot)
       animationMixerRef.current = mixer
@@ -592,7 +626,7 @@ function App() {
           0.24,
         )
         robotRoot.scale.setScalar(nextScale)
-        robotRoot.rotation.x = THREE.MathUtils.lerp(robotRoot.rotation.x, handState.targetPitch, 0.22)
+        robotRoot.rotation.x = lerpAngle(robotRoot.rotation.x, handState.targetPitch, 0.22)
         robotRoot.rotation.y = lerpAngle(robotRoot.rotation.y, handState.targetYaw, 0.4)
         robotRoot.rotation.z = lerpAngle(robotRoot.rotation.z, handState.targetSpin, 0.3)
       } else {
@@ -610,7 +644,11 @@ function App() {
           0.12,
         )
         robotRoot.scale.setScalar(nextScale)
-        robotRoot.rotation.x = THREE.MathUtils.lerp(robotRoot.rotation.x, IDLE_X_ROTATION, 0.06)
+        robotRoot.rotation.x = lerpAngle(
+          robotRoot.rotation.x,
+          IDLE_X_ROTATION + experienceConfig.modelPitchOffset,
+          0.06,
+        )
         robotRoot.rotation.y = lerpAngle(
           robotRoot.rotation.y,
           IDLE_Y_ROTATION + experienceConfig.modelYawOffset,
